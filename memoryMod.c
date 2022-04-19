@@ -1,5 +1,5 @@
 /**********************************************************************
- * Authors: Parker Ottaway, Derek Allen, Auston Hein
+ * Authors: 
  * 
  * Description: This is a kernel module that takes in a
  * 				task, walks the page table and outputs
