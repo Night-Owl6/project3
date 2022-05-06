@@ -41,8 +41,7 @@ int find_pte(struct task_struct *task){
     pud_t *pud;
     pte_t *ptep, pte;
 
-    for_each_process(task){
-        //printk(KERN_INFO "process's pid = %d", task->pid);       
+    for_each_process(task){       
         if(task->pid == pid && task != NULL){
             printk("FIND PROCESS\n");
             vma = task->mm->mmap;
@@ -56,10 +55,6 @@ int find_pte(struct task_struct *task){
             int failed = 0;
 
             while(vma->vm_next != NULL){
-                //int a = 0;      //accessed in each vma
-                //int na = 0;     //no_accessed in each vma
-                //int counter = 0;
-                //int failed = 0;
                 int i = 0;
                 //iterate each vma
                 for(address = vma->vm_start; address < vma->vm_end; address += PAGE_SIZE){
@@ -99,21 +94,15 @@ int find_pte(struct task_struct *task){
                     }           
                 }
                 vma_counter++;
-                //printk("The %dth vma", vma_counter);
-                //printk("%d pages found in memory, %d pages failed to found in memory, in total %d\n", counter, failed, i);
-                //printk("%d pages get accessed, %d didn't", accessed, no_accessed);
-                //printk("tag1");
-                vma = vma->vm_next;
-                //printk("tag2");   
+               
+                vma = vma->vm_next; 
             }
             int wss_size = accessed * 4;
             int rss_size = counter * 4;
             int swap_size = failed * 4;
-            //printk("In total, %d pte get accessed, %d didn't", accessed, no_accessed);
-            //printk("%d pages in the memory, %d pages in the storage, %d is being accessing", counter, failed, accessed);
+
             printk("PID = %d: RSS = %dKB, WSS = %dKB, SWAP = %dKB", pid, rss_size, wss_size, swap_size);
         }
-        //printk("tag3");
     }
     return 0;
 }
@@ -138,7 +127,6 @@ static int __init mm_init(void){
 	ktime = ktime_set( 0, timer_interval_ns );
 	hrtimer_init(&my_hrtimer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
 	my_hrtimer.function = &no_restart_callback;
-	//start_time = jiffies;
 	hrtimer_start(&my_hrtimer, ktime, HRTIMER_MODE_REL);   
     return 0;
 }
